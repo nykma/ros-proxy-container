@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        arch: ["ubuntu-24.04", "ubuntu-24.04-arm"]
+    runs-on: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: JRMurr/direnv-nix-action@v4.2.0
+      - name: "Build docker image"
+        run: just docker
+      - name: "Build docker image with tags"
+        run: just docker-with-tag
